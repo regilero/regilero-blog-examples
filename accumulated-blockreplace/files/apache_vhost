@@ -1,0 +1,41 @@
+# Main Virtualhost for {{ servername }}
+<VirtualHost *:80>
+    ServerAdmin foo@example.com
+
+    DocumentRoot {{ docroot }}
+
+    ServerName {{ servername }}
+
+    LogLevel info
+
+  <Directory />
+    AllowOverride None
+    Order allow, deny
+    deny from all
+  </Directory>
+
+  <Directory {{ docroot }}>
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+    # Here any extra configuration settings if any:
+    {% if accumulator|default(False) -%}
+    {%   if 'extra-settings-example-virtualhost-maindir' in accumulator -%}
+    {%     for line in accumulator['extra-settings-example-virtualhost-maindir'] -%}
+    {{ line|indent(4)}}
+    {%-     endfor %}
+    {%-   endif %}
+    {%- endif %}
+  </Directory>
+
+# Here any extra configuration settings if any:
+{% if accumulator|default(False) -%}
+{%   if 'extra-settings-example-virtualhost' in accumulator -%}
+{%     for line in accumulator['extra-settings-example-virtualhost'] -%}
+{{ line|indent(2) }}
+{%-     endfor %}
+{%-   endif %}
+{%- endif %}
+
+</VirtualHost>
